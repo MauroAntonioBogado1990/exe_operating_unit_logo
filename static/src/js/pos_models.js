@@ -1,0 +1,38 @@
+odoo.define('pos_operating_unit_logo.pos_models', function (require) {
+    "use strict";
+    var models = require('point_of_sale.models');
+
+    // 1. IMPORTANTE: Decirle al POS que traiga el campo desde el backend
+    models.load_fields('pos.config', ['operating_unit_id']);
+
+    // 2. Cargar el modelo de la unidad operativa
+    models.load_models([{
+        model:  'operating.unit',
+        fields: ['name', 'report_logo', 'partner_id'],
+        // Usamos una función para el dominio con validación de existencia
+        domain: function(self){ 
+            if (self.config.operating_unit_id) {
+                return [['id', '=', self.config.operating_unit_id[0]]]; 
+            }
+            return [['id', '=', 0]]; // Si no hay, devolvemos un dominio vacío
+        },
+        loaded: function(self, ou){
+            if (ou.length > 0) {
+                self.operating_unit_data = ou[0]; 
+            } else {
+                self.operating_unit_data = false;
+            }
+        },
+    }]);
+
+    // 3. Inyectar la información en el ticket
+    var _super_order = models.Order.prototype;
+    models.Order = models.Order.extend({
+        export_for_printing: function() {
+            var receipt = _super_order.export_for_printing.apply(this, arguments);
+            // Pasamos la data al objeto 'receipt' que lee el XML
+            receipt.operating_unit = this.pos.operating_unit_data;
+            return receipt;
+        }
+    });
+});

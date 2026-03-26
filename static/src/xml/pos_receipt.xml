@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="OrderReceipt">
+        <t t-jquery=".pos-receipt-logo" t-operation="replace">
+            
+            <t t-if="receipt.operating_unit and receipt.operating_unit.report_logo">
+                <img class="pos-receipt-logo" t-attf-src="data:image/png;base64,{{receipt.operating_unit.report_logo}}" alt="Logo Unidad Operativa"/>
+                <br/>
+            </t>
+            <t t-elif="receipt.company.logo">
+                <img class="pos-receipt-logo" t-att-src="receipt.company.logo" alt="Logo Compañía"/>
+                <br/>
+            </t>
+            
+        </t>
+        
+        </t>
+
+</templates>
