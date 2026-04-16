@@ -6,11 +6,6 @@ class OperatingUnit(models.Model):
 
     report_logo = fields.Binary("Logo Reporte", attachment=True,
                                help="Logo used in reports for this operating unit. Falls back to company logo.")
-    user_ids = fields.Many2many(
-        'res.users',
-        string='Usuarios',
-        help="Usuarios asociados a esta unidad operativa para la selección automática del logo en el ticket POS."
-    )
 
 class PosConfig(models.Model):
     _inherit = 'pos.config'

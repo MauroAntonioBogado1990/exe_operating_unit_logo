@@ -1,0 +1,14 @@
+<odoo>
+  <template id="report_invoice_document_inherit_logo" inherit_id="account.report_invoice_document">
+    <xpath expr="//div[contains(@class,'header')]" position="inside">
+      <t t-if="o.operating_unit_id and o.operating_unit_id.report_logo">
+        <div class="row"/>
+        <div class="row">
+          <div class="col-6">
+            <img t-att-src="'data:image/png;base64,%s' % o.operating_unit_id.report_logo" style="max-height:90px;"/>
+          </div>
+        </div>
+      </t>
+    </xpath>
+  </template>
+</odoo>
